@@ -2,21 +2,16 @@ import os
 import sys
 import asyncio
 from dotenv import load_dotenv
-from kubernetes import client, config
-from db.database import init_db, get_prompt_by_id
 
-config.load_kube_config()
-batch = client.BatchV1Api()
+from db.database import init_db, get_prompt_by_id
 
 load_dotenv()
 
 from services.redis_client import r
 from services.k8s import create_k8s_job
 
-
 def main():
     asyncio.run(run_worker())
-
 
 async def run_worker():
     print("Worker started. Connecting to DB...")
@@ -43,7 +38,6 @@ async def run_worker():
         except Exception as e:
             print(f"Error processing prompt: {e}")
             await asyncio.sleep(1)
-
 
 if __name__ == "__main__":
     main()

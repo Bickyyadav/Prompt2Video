@@ -3,8 +3,27 @@ import os
 import uuid
 
 
-config.load_kube_config()
-batch = client.BatchV1Api()
+_batch_client = None
+
+
+def get_batch_client():
+    global _batch_client
+    if _batch_client:
+        return _batch_client
+
+    try:
+        config.load_incluster_config()
+        print("Loaded in-cluster config.")
+    except config.ConfigException:
+        try:
+            config.load_kube_config()
+            print("Loaded kube config.")
+        except config.ConfigException:
+            print("Could not load kubernetes configuration.")
+            return None
+
+    _batch_client = client.BatchV1Api()
+    return _batch_client
 
 
 PRIMARY_BACKEND_URL = os.getenv("PRIMARY_BACKEND_URL")
@@ -16,6 +35,10 @@ BACKEND_URL = os.getenv("BACKEND_URL")
 
 
 def create_k8s_job(user_id: str, prompt_text: str):
+    batch = get_batch_client()
+    if not batch:
+        raise Exception("Kubernetes client not available. Check configuration.")
+
     print("🔴🔴🔴🔴🔴🔴")
     print(user_id)
     print(prompt_text)
@@ -31,10 +54,6 @@ def create_k8s_job(user_id: str, prompt_text: str):
                         client.V1Container(
                             name="worker",
                             image="bicky2005/jobscheduler:v1",
-                            # resources=client.V1ResourceRequirements(
-                            #     requests={"memory": "256Mi", "cpu": "250m"},
-                            #     limits={"memory": "512Mi", "cpu": "500m"},
-                            # ),
                             env=[
                                 client.V1EnvVar(name="USER_ID", value=user_id),
                                 client.V1EnvVar(name="USER_PROMPT", value=prompt_text),
