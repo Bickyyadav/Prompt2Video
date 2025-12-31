@@ -7,7 +7,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 from routes.prompt import router
 
-
 load_dotenv()
 app = FastAPI()
 app.include_router(router)
@@ -23,7 +22,8 @@ async def start_db():
     await init_db()
 
 origin=[
-    "http://localhost:3000/"
+    "http://localhost:3000/",
+    "http://2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com",
 ]    
 
 app.add_middleware(

@@ -6,7 +6,6 @@ from internal_redis.redis_client import r
 
 router = APIRouter()
 
-
 @router.post("/c/prompt")
 async def receive_prompt(request: PromptRequest):
     print(f"Received prompt: {request.prompt}")
@@ -30,7 +29,6 @@ async def receive_video(request: VideoRequest):
     await prompt_data.save()
 
     return {"status": "updated", "id": str(prompt_data.id)}
-
 
 @router.post("/c/ai_generated_prompt")
 async def receive_ai_generated_prompt(request: list[AiPromptRequest]):
@@ -60,3 +58,4 @@ async def receive_ai_generated_prompt(request: list[AiPromptRequest]):
         raise HTTPException(status_code=404, detail="No valid prompts found to update")
 
     return {"status": "updated", "ids": list(updated_ids)}
+

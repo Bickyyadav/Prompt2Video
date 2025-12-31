@@ -55,7 +55,10 @@ def process(prompt_id: str, text: str, total_chunks: int = 5):
             break
     try:
         backend_url = os.getenv("PRIMARY_BACKEND_URL", "http://localhost:8000")
-        url = f"{backend_url}/c/ai_generated_prompt"
+        print("🔴🔴🔴🔴")
+        print(f"Backend URL: {backend_url}")
+        # url = f""http://"{backend_url}/c/ai_generated_prompt"
+        url = f"http://{backend_url}/c/ai_generated_prompt"
         payload = [
             {
                 "id": prompt_id,
@@ -66,9 +69,9 @@ def process(prompt_id: str, text: str, total_chunks: int = 5):
         if response.status_code == 200:
             print(f"Successfully sent generated scenes to backend. Status: {response.status_code}")
         else:
-            print(f"Failed to send scenes to backend. Status: {response.status_code}, Body: {response.text}")
+            print(f"bickyFailed to send scenes to backend. Status: {response.status_code}, Body: {response.text}")
     except Exception as e:
-        print(f"Error sending scenes to backend: {e}")
+        print(f"bickyError sending scenes to backend: {e}")
 
     return scene_memory
 

@@ -27,12 +27,12 @@ def get_batch_client():
 
 
 PRIMARY_BACKEND_URL = os.getenv("PRIMARY_BACKEND_URL")
+print("🔴🔴🔴🔴🔴🔴🔴🔴")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 CLOUDINARY_CLOUD_NAME = os.getenv("CLOUDINARY_CLOUD_NAME")
 CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
 CLOUDINARY_SECRET_KEY = os.getenv("CLOUDINARY_SECRET_KEY")
 BACKEND_URL = os.getenv("BACKEND_URL")
-
 
 def create_k8s_job(user_id: str, prompt_text: str):
     batch = get_batch_client()
