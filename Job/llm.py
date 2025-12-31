@@ -57,7 +57,6 @@ def process(prompt_id: str, text: str, total_chunks: int = 5):
         backend_url = os.getenv("PRIMARY_BACKEND_URL", "http://localhost:8000")
         print("🔴🔴🔴🔴")
         print(f"Backend URL: {backend_url}")
-        # url = f""http://"{backend_url}/c/ai_generated_prompt"
         url = f"http://{backend_url}/c/ai_generated_prompt"
         payload = [
             {

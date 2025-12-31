@@ -34,6 +34,7 @@ CLOUDINARY_API_KEY = os.getenv("CLOUDINARY_API_KEY")
 CLOUDINARY_SECRET_KEY = os.getenv("CLOUDINARY_SECRET_KEY")
 BACKEND_URL = os.getenv("BACKEND_URL")
 
+
 def create_k8s_job(user_id: str, prompt_text: str):
     batch = get_batch_client()
     if not batch:
@@ -53,7 +54,7 @@ def create_k8s_job(user_id: str, prompt_text: str):
                     containers=[
                         client.V1Container(
                             name="worker",
-                            image="bicky2005/jobscheduler:v1",
+                            image="bicky2005/jobscheduler:v2",
                             env=[
                                 client.V1EnvVar(name="USER_ID", value=user_id),
                                 client.V1EnvVar(name="USER_PROMPT", value=prompt_text),
@@ -85,5 +86,3 @@ def create_k8s_job(user_id: str, prompt_text: str):
         ),
     )
     batch.create_namespaced_job(namespace="default", body=job)
-
-
