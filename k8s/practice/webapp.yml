@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: webapp-deployment
+  labels:
+    app: webapp
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: webapp
+  template:
+    metadata:
+      labels:
+        app: webapp
+    spec:
+      containers:
+      - name: webapp
+        image: webapp:1.0
+        ports:
+        - containerPort: 3000
+        env:
+          - name: MONGO_URL
+            valueFrom: 
+              secretKeyRef:
+                name: mongo-secret
+                key: mongo-url
+          - name: MONGO_PASSWORD
+            valueFrom: 
+              secretKeyRef:
+                name: mongo-secret
+                key: mongo-password
+          - name: MONGO_USER
+            valueFrom: 
+              secretKeyRef:
+                name: mongo-secret
+                key: mongo-user
+--- 
+apiVersion: v1
+kind: Service
+metadata:
+  name: webapp-service
+spec:
+  selector:
+    app.kubernetes.io/name: webapp
+  ports:
+    - protocol: TCP
+      port: 3000
+      targetPort: 3000

@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prompt2video-primarybackend-deployment
+  labels:
+    app: prompt2video-primarybackend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prompt2video-primarybackend 
+  template:
+    metadata:
+      labels:
+        app: prompt2video-primarybackend
+    spec:
+      containers:
+      - name: prompt2video-primarybackend
+        image: bicky2005/prompt2video-primarybackend:latest
+        ports:
+        - containerPort: 80
+        envFrom:
+            - secretRef:
+                name: prompt2video-primarybackend-secret

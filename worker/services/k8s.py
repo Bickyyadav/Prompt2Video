@@ -87,4 +87,3 @@ def create_k8s_job(user_id: str, prompt_text: str):
     batch.create_namespaced_job(namespace="default", body=job)
 
 
-#  kubectl logs -f -l job-name=task-6954df83b30e02f8096c19d8-f699f9
