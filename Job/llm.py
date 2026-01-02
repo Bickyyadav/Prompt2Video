@@ -43,7 +43,7 @@ def process(prompt_id: str, text: str, total_chunks: int = 5):
                 model="gemini/gemini-2.0-flash", 
                 messages=messages,
                 response_format={"type": "json_object"}
-            )
+           )
             content = response.choices[0].message.content
             print(f"Received Chunk {chunk_index} Response")
             
@@ -57,7 +57,7 @@ def process(prompt_id: str, text: str, total_chunks: int = 5):
         backend_url = os.getenv("PRIMARY_BACKEND_URL", "http://localhost:8000")
         print("🔴🔴🔴🔴")
         print(f"Backend URL: {backend_url}")
-        url = f"http://{backend_url}/c/ai_generated_prompt"
+        url = f"{backend_url}/c/ai_generated_prompt"
         payload = [
             {
                 "id": prompt_id,
@@ -66,11 +66,11 @@ def process(prompt_id: str, text: str, total_chunks: int = 5):
         ]
         response = requests.post(url, json=payload)
         if response.status_code == 200:
-            print(f"Successfully sent generated scenes to backend. Status: {response.status_code}")
+            print(f"bickya Successfully sent generated scenes to backend. Status: {response.status_code}")
         else:
-            print(f"bickyFailed to send scenes to backend. Status: {response.status_code}, Body: {response.text}")
+            print(f"abinashFailed to send scenes to backend. Status: {response.status_code}, Body: {response.text}")
     except Exception as e:
-        print(f"bickyError sending scenes to backend: {e}")
+        print(f"abinashError sending scenes to backend: {e}")
 
     return scene_memory
 

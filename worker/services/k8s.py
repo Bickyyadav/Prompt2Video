@@ -47,6 +47,7 @@ def create_k8s_job(user_id: str, prompt_text: str):
     job = client.V1Job(
         metadata=client.V1ObjectMeta(name=job_name),
         spec=client.V1JobSpec(
+            ttl_seconds_after_finished=60,
             backoff_limit=1,
             template=client.V1PodTemplateSpec(
                 spec=client.V1PodSpec(
@@ -54,7 +55,7 @@ def create_k8s_job(user_id: str, prompt_text: str):
                     containers=[
                         client.V1Container(
                             name="worker",
-                            image="bicky2005/jobscheduler:v2",
+                            image="bicky2005/jobscheduler:v3",
                             env=[
                                 client.V1EnvVar(name="USER_ID", value=user_id),
                                 client.V1EnvVar(name="USER_PROMPT", value=prompt_text),

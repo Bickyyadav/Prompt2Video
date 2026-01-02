@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: prompt2videoworker
-        image: bicky2005/prompt2videoworker:latest
+        image: bicky2005/promptvideoworker:v1
         ports:
         - containerPort: 80
         envFrom:
