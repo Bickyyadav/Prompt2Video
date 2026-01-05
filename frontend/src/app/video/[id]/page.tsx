@@ -18,6 +18,7 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
     const [aiPrompt, setAiPrompt] = useState<string | null>(null);
     const [videoUrl, setVideoUrl] = useState<string | null>(null);
     const [logs, setLogs] = useState<string[]>(['[00:00:01] INFO Initializing...']);
+    const [isConsoleExpanded, setIsConsoleExpanded] = useState(false);
 
     // Polling for AI Prompt
     useEffect(() => {
@@ -256,23 +257,62 @@ export default function VideoPage({ params }: { params: Promise<{ id: string }> 
                             </div>
 
                             {/* Timeline / Console */}
-                            <div className="flex-1 bg-neutral-900/50 rounded-xl border border-neutral-800 p-4 font-mono text-sm overflow-hidden flex flex-col">
-                                <div className="flex items-center justify-between mb-2 pb-2 border-b border-neutral-800">
-                                    <span className="text-neutral-400">System Output</span>
-                                    <div className="flex gap-1.5">
-                                        <div className="w-3 h-3 rounded-full bg-red-500/20" />
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500/20" />
-                                        <div className="w-3 h-3 rounded-full bg-green-500/20" />
+                            {/* Timeline / Console */}
+                            <div className={`
+                                transition-all duration-300 ease-in-out flex flex-col font-mono text-sm overflow-hidden
+                                ${isConsoleExpanded
+                                    ? 'fixed inset-0 z-50 bg-black/90 backdrop-blur-xl p-8'
+                                    : 'flex-1 bg-neutral-900/50 rounded-xl border border-neutral-800 p-4'}
+                            `}>
+                                <div className="flex items-center justify-between mb-4 border-b border-white/10 pb-3">
+                                    <div className="flex items-center gap-3">
+                                        <span className="text-neutral-400 font-medium tracking-wide">System Output</span>
+                                        {isConsoleExpanded && (
+                                            <span className="px-2 py-0.5 rounded text-[10px] bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                                                LIVE MONITOR
+                                            </span>
+                                        )}
+                                    </div>
+                                    <div className="flex items-center gap-3">
+                                        <button
+                                            onClick={() => setIsConsoleExpanded(!isConsoleExpanded)}
+                                            className="p-1.5 hover:bg-white/10 rounded-md transition-colors text-neutral-400 hover:text-white"
+                                            title={isConsoleExpanded ? "Minimize" : "Maximize"}
+                                        >
+                                            {isConsoleExpanded ? (
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                                </svg>
+                                            ) : (
+                                                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 8V4m0 0h4M20 8V4m0 0h-4M4 16v4m0 0h4M20 16v4m0 0h-4" />
+                                                </svg>
+                                            )}
+                                        </button>
+                                        <div className="flex gap-1.5">
+                                            <div className="w-3 h-3 rounded-full bg-red-500/20 ring-1 ring-black/50" />
+                                            <div className="w-3 h-3 rounded-full bg-yellow-500/20 ring-1 ring-black/50" />
+                                            <div className="w-3 h-3 rounded-full bg-green-500/20 ring-1 ring-black/50" />
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="flex-1 overflow-auto space-y-1 text-xs text-neutral-500">
+                                <div className="flex-1 overflow-auto space-y-2 text-xs text-neutral-500 custom-scrollbar">
                                     {/* Render the new Structured prompt or fallback */}
-                                    {renderAiPrompt()}
+                                    <div className={isConsoleExpanded ? "max-w-5xl mx-auto w-full" : ""}>
+                                        {renderAiPrompt()}
+                                    </div>
 
                                     {/* Basic poller logs */}
-                                    {logs.map((log, i) => (
-                                        <p key={i} className="opacity-50 hover:opacity-100 transition-opacity">{log}</p>
-                                    ))}
+                                    <div className={`mt-4 pt-4 border-t border-white/5 space-y-1 ${isConsoleExpanded ? "max-w-5xl mx-auto w-full" : ""}`}>
+                                        {logs.map((log, i) => (
+                                            <p key={i} className="opacity-60 hover:opacity-100 transition-opacity font-mono">
+                                                <span className="text-neutral-600 mr-2">{log.split(']')[0]}]</span>
+                                                <span className={log.includes('SUCCESS') ? 'text-green-400' : 'text-neutral-300'}>
+                                                    {log.split(']').slice(1).join(']')}
+                                                </span>
+                                            </p>
+                                        ))}
+                                    </div>
                                 </div>
                             </div>
                         </div>

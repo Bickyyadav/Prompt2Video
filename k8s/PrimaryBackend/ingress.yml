@@ -1,10 +1,36 @@
+# apiVersion: networking.k8s.io/v1
+# kind: Ingress
+# metadata:
+#   name: prompt2video-primarybackend-ingress
+# spec:
+#   rules:
+#   - http:
+#       paths:
+#       - path: /
+#         pathType: Prefix
+#         backend:
+#           service:
+#             name: prompt2video-primarybackend-service
+#             port:
+#               number: 80
+              
+
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: prompt2video-primarybackend-ingress
+  annotations:
+    spec.ingressClassName: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
 spec:
+  tls:
+  - hosts:
+    - 2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com
+    secretName: prompt2video-primarybackend-tls
   rules:
-  - http:
+  - host: 2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com
+    http:
       paths:
       - path: /
         pathType: Prefix
@@ -13,4 +39,3 @@ spec:
             name: prompt2video-primarybackend-service
             port:
               number: 80
-              

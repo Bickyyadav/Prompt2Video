@@ -21,18 +21,43 @@ def index():
 async def start_db():
     await init_db()
 
-origin=[
-    "http://localhost:3000",
-    "http://2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com",
-]    
+# origin=[
+#     "http://localhost:3000",
+#     "https://prompt2-video.vercel.app",
+#     "http://2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com",
+# ]    
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins= origin,
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
+
+# origins = [
+#     "http://localhost:3000",
+#     "https://prompt2-video.vercel.app",
+#     "https://2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com",
+# ]
+
+# app.add_middleware(
+#     CORSMiddleware,
+#     allow_origins=["*"],
+#     allow_credentials=True,
+#     allow_methods=["*"],
+#     allow_headers=["*"],
+# )
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins= origin,
-    allow_credentials=True,
+    allow_origins=["*"],
+    allow_credentials=False,  
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
 
 
 if __name__ == "__main__":
