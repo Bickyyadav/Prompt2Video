@@ -14,7 +14,8 @@ export default function Home() {
 
     setIsLoading(true);
     try {
-      const response = await fetch('http://2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com/c/prompt', {
+      // const response = await fetch('http://2349a7a1-caa7-4eb3-a28a-5647cf81a9a5.k8s.civo.com/c/prompt', {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/c/prompt`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
